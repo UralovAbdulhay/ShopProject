@@ -1,0 +1,55 @@
+
+
+      task 1
+     /expired_invoices
+     select * from Invoice  where Invoice.due < Invoice.issued
+
+
+     task 2
+     / error_date_invoices
+     SELECT * from Invoice  inner join Invoice.orders  on Invoice.id = orders.invoice_id
+     where Invoice.create_at <= orders.create_at
+
+
+     task 3
+     / orders_without_details
+     select * from Order  left join Detail  where  Detail.id is null and Order.createAt < :date1
+
+
+     task 4
+     / customers_without_orders
+     SELECT * from Customer left join Orders on Customer.id = Orders.id where Orders.createAt like '%2016%' and Orders.id isnull;
+
+
+
+     task 6
+     /overpaid_invoices
+    select Invoice.id, (sum(Payment.amount) - Invoice.amount) as residue from Invoice
+        inner join Payment  on Invoice.id = Payment.invoice_id where residue > 0 and i.id = :id
+
+
+    task 7
+    / high_demand_products
+
+
+
+
+
+    task 9
+    /number_of_products_in_year
+    SELECT count(Orders.OrderId), Customers.Country, Orders.OrderDate from Customers
+    inner join Orders on Orders.CustomerID = Customers.CustomerID
+    where Orders.OrderDate like '%1997%' group by Customers.Country
+
+
+
+    task 10
+    / orders_without_invoices
+    SELECT Orders.OrderID, Orders.OrderDate, Products.Price * OrderDetails.Quantity as Amount,
+    OrderDetails.Quantity as Quantity, Products.Price as Price
+    FROM Orders
+    left join OrderDetails on OrderDetails.OrderID = Orders.OrderID
+    join Products on OrderDetails.ProductID = Products.ProductID
+    where OrderDetails.OrderDetailID not null
+    limit 20
+    ;
